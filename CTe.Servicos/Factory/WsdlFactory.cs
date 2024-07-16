@@ -1,34 +1,41 @@
 ﻿/********************************************************************************/
-/* Projeto: Biblioteca ZeusNFe                                                  */
-/* Biblioteca C# para emissão de Nota Fiscal Eletrônica - NFe e Nota Fiscal de  */
-/* Consumidor Eletrônica - NFC-e (http://www.nfe.fazenda.gov.br)                */
+/* Projeto: Biblioteca ZeusNFe */
+/* Biblioteca C# para emissão de Nota Fiscal Eletrônica - NFe e Nota Fiscal de
+ */
+/* Consumidor Eletrônica - NFC-e (http://www.nfe.fazenda.gov.br) */
 /*                                                                              */
-/* Direitos Autorais Reservados (c) 2014 Adenilton Batista da Silva             */
-/*                                       Zeusdev Tecnologia LTDA ME             */
+/* Direitos Autorais Reservados (c) 2014 Adenilton Batista da Silva */
+/*                                       Zeusdev Tecnologia LTDA ME */
 /*                                                                              */
-/*  Você pode obter a última versão desse arquivo no GitHub                     */
-/* localizado em https://github.com/adeniltonbs/Zeus.Net.NFe.NFCe               */
+/*  Você pode obter a última versão desse arquivo no GitHub */
+/* localizado em https://github.com/adeniltonbs/Zeus.Net.NFe.NFCe */
 /*                                                                              */
 /*                                                                              */
-/*  Esta biblioteca é software livre; você pode redistribuí-la e/ou modificá-la */
-/* sob os termos da Licença Pública Geral Menor do GNU conforme publicada pela  */
-/* Free Software Foundation; tanto a versão 2.1 da Licença, ou (a seu critério) */
-/* qualquer versão posterior.                                                   */
+/*  Esta biblioteca é software livre; você pode redistribuí-la e/ou modificá-la
+ */
+/* sob os termos da Licença Pública Geral Menor do GNU conforme publicada pela
+ */
+/* Free Software Foundation; tanto a versão 2.1 da Licença, ou (a seu critério)
+ */
+/* qualquer versão posterior. */
 /*                                                                              */
-/*  Esta biblioteca é distribuída na expectativa de que seja útil, porém, SEM   */
-/* NENHUMA GARANTIA; nem mesmo a garantia implícita de COMERCIABILIDADE OU      */
-/* ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Consulte a Licença Pública Geral Menor*/
-/* do GNU para mais detalhes. (Arquivo LICENÇA.TXT ou LICENSE.TXT)              */
+/*  Esta biblioteca é distribuída na expectativa de que seja útil, porém, SEM */
+/* NENHUMA GARANTIA; nem mesmo a garantia implícita de COMERCIABILIDADE OU */
+/* ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Consulte a Licença Pública Geral
+ * Menor*/
+/* do GNU para mais detalhes. (Arquivo LICENÇA.TXT ou LICENSE.TXT) */
 /*                                                                              */
-/*  Você deve ter recebido uma cópia da Licença Pública Geral Menor do GNU junto*/
-/* com esta biblioteca; se não, escreva para a Free Software Foundation, Inc.,  */
-/* no endereço 59 Temple Street, Suite 330, Boston, MA 02111-1307 USA.          */
-/* Você também pode obter uma copia da licença em:                              */
-/* http://www.opensource.org/licenses/lgpl-license.php                          */
+/*  Você deve ter recebido uma cópia da Licença Pública Geral Menor do GNU
+ * junto*/
+/* com esta biblioteca; se não, escreva para a Free Software Foundation, Inc.,
+ */
+/* no endereço 59 Temple Street, Suite 330, Boston, MA 02111-1307 USA. */
+/* Você também pode obter uma copia da licença em: */
+/* http://www.opensource.org/licenses/lgpl-license.php */
 /*                                                                              */
-/* Zeusdev Tecnologia LTDA ME - adenilton@zeusautomacao.com.br                  */
-/* http://www.zeusautomacao.com.br/                                             */
-/* Rua Comendador Francisco josé da Cunha, 111 - Itabaiana - SE - 49500-000     */
+/* Zeusdev Tecnologia LTDA ME - adenilton@zeusautomacao.com.br */
+/* http://www.zeusautomacao.com.br/ */
+/* Rua Comendador Francisco josé da Cunha, 111 - Itabaiana - SE - 49500-000 */
 /********************************************************************************/
 
 using CTe.Classes;
@@ -48,129 +55,143 @@ using CTe.Wsdl.Evento.V4;
 using CTe.Wsdl.Recepcao.Sincrono;
 using System.Security.Cryptography.X509Certificates;
 
-namespace CTe.Servicos.Factory
-{
-public class WsdlFactory
-{
-    public static CteStatusServico CriaWsdlCteStatusServico(ConfiguracaoServico configuracaoServico = null, X509Certificate2 certificado = null)
-    {
-        var url = UrlHelper.ObterUrlServico(configuracaoServico).CteStatusServico;
+namespace CTe.Servicos.Factory {
+public class WsdlFactory {
+  public static CteStatusServico
+  CriaWsdlCteStatusServico(ConfiguracaoServico configuracaoServico = null,
+                           X509Certificate2 certificado = null) {
+    var url = UrlHelper.ObterUrlServico(configuracaoServico).CteStatusServico;
 
-        var configuracaoWsdl = CriaConfiguracao(url, configuracaoServico, certificado);
+    var configuracaoWsdl =
+        CriaConfiguracao(url, configuracaoServico, certificado);
 
-        return new CteStatusServico(configuracaoWsdl);
-    }
+    return new CteStatusServico(configuracaoWsdl);
+  }
 
-    public static CteConsulta CriaWsdlConsultaProtocolo(ConfiguracaoServico configuracaoServico = null, X509Certificate2 certificado = null)
-    {
-        var url = UrlHelper.ObterUrlServico(configuracaoServico).CteConsulta;
+  public static CteConsulta
+  CriaWsdlConsultaProtocolo(ConfiguracaoServico configuracaoServico = null,
+                            X509Certificate2 certificado = null) {
+    var url = UrlHelper.ObterUrlServico(configuracaoServico).CteConsulta;
 
-        var configuracaoWsdl = CriaConfiguracao(url, configuracaoServico, certificado);
+    var configuracaoWsdl =
+        CriaConfiguracao(url, configuracaoServico, certificado);
 
-        return new CteConsulta(configuracaoWsdl);
-    }
+    return new CteConsulta(configuracaoWsdl);
+  }
 
-    public static CteConsultaV4 CriaWsdlConsultaProtocoloV4(ConfiguracaoServico configuracaoServico = null, X509Certificate2 certificado = null)
-    {
-        var url = UrlHelper.ObterUrlServico(configuracaoServico).CteConsulta;
+  public static CteConsultaV4
+  CriaWsdlConsultaProtocoloV4(ConfiguracaoServico configuracaoServico = null,
+                              X509Certificate2 certificado = null) {
+    var url = UrlHelper.ObterUrlServico(configuracaoServico).CteConsulta;
 
-        var configuracaoWsdl = CriaConfiguracao(url, configuracaoServico, certificado);
+    var configuracaoWsdl =
+        CriaConfiguracao(url, configuracaoServico, certificado);
 
-        return new CteConsultaV4(configuracaoWsdl);
-    }
+    return new CteConsultaV4(configuracaoWsdl);
+  }
 
-    public static CteInutilizacao CriaWsdlCteInutilizacao(ConfiguracaoServico configuracaoServico = null, X509Certificate2 certificado = null)
-    {
-        var url = UrlHelper.ObterUrlServico(configuracaoServico).CteInutilizacao;
+  public static CteInutilizacao
+  CriaWsdlCteInutilizacao(ConfiguracaoServico configuracaoServico = null,
+                          X509Certificate2 certificado = null) {
+    var url = UrlHelper.ObterUrlServico(configuracaoServico).CteInutilizacao;
 
-        var configuracaoWsdl = CriaConfiguracao(url, configuracaoServico, certificado);
+    var configuracaoWsdl =
+        CriaConfiguracao(url, configuracaoServico, certificado);
 
-        return new CteInutilizacao(configuracaoWsdl);
-    }
+    return new CteInutilizacao(configuracaoWsdl);
+  }
 
-    public static CteRetRecepcao CriaWsdlCteRetRecepcao(ConfiguracaoServico configuracaoServico = null, X509Certificate2 certificado = null)
-    {
-        var url = UrlHelper.ObterUrlServico(configuracaoServico).CteRetRecepcao;
+  public static CteRetRecepcao
+  CriaWsdlCteRetRecepcao(ConfiguracaoServico configuracaoServico = null,
+                         X509Certificate2 certificado = null) {
+    var url = UrlHelper.ObterUrlServico(configuracaoServico).CteRetRecepcao;
 
-        var configuracaoWsdl = CriaConfiguracao(url, configuracaoServico, certificado);
+    var configuracaoWsdl =
+        CriaConfiguracao(url, configuracaoServico, certificado);
 
-        return new CteRetRecepcao(configuracaoWsdl);
-    }
+    return new CteRetRecepcao(configuracaoWsdl);
+  }
 
-    public static CteRecepcao CriaWsdlCteRecepcao(ConfiguracaoServico configuracaoServico = null, X509Certificate2 certificado = null)
-    {
-        var url = UrlHelper.ObterUrlServico(configuracaoServico).CteRecepcao;
+  public static CteRecepcao
+  CriaWsdlCteRecepcao(ConfiguracaoServico configuracaoServico = null,
+                      X509Certificate2 certificado = null) {
+    var url = UrlHelper.ObterUrlServico(configuracaoServico).CteRecepcao;
 
-        var configuracaoWsdl = CriaConfiguracao(url, configuracaoServico, certificado);
+    var configuracaoWsdl =
+        CriaConfiguracao(url, configuracaoServico, certificado);
 
-        return new CteRecepcao(configuracaoWsdl);
-    }
+    return new CteRecepcao(configuracaoWsdl);
+  }
 
-    public static CteRecepcaoSincronoV4 CriaWsdlCteRecepcaoSincronoV4(ConfiguracaoServico configuracaoServico = null, X509Certificate2 certificado = null)
-    {
-        var url = UrlHelper.ObterUrlServico(configuracaoServico).CteRecepcaoSinc;
+  public static CteRecepcaoSincronoV4
+  CriaWsdlCteRecepcaoSincronoV4(ConfiguracaoServico configuracaoServico = null,
+                                X509Certificate2 certificado = null) {
+    var url = UrlHelper.ObterUrlServico(configuracaoServico).CteRecepcaoSinc;
 
-        var configuracaoWsdl = CriaConfiguracao(url, configuracaoServico, certificado);
+    var configuracaoWsdl =
+        CriaConfiguracao(url, configuracaoServico, certificado);
 
-        return new CteRecepcaoSincronoV4(configuracaoWsdl);
-    }
-    public static CteRecepcaoSincronoOSV4 CriaWsdlCteRecepcaoSincronoOSV4(ConfiguracaoServico configuracaoServico = null, X509Certificate2 certificado = null)
-    {
-        var url = UrlHelper.ObterUrlServico(configuracaoServico).CteRecepcaoOs;
+    return new CteRecepcaoSincronoV4(configuracaoWsdl);
+  }
+  public static CteRecepcaoSincronoOSV4 CriaWsdlCteRecepcaoSincronoOSV4(
+      ConfiguracaoServico configuracaoServico = null,
+      X509Certificate2 certificado = null) {
+    var url = UrlHelper.ObterUrlServico(configuracaoServico).CteRecepcaoOs;
 
-        var configuracaoWsdl = CriaConfiguracao(url, configuracaoServico, certificado);
+    var configuracaoWsdl =
+        CriaConfiguracao(url, configuracaoServico, certificado);
 
-        return new CteRecepcaoSincronoOSV4(configuracaoWsdl);
-    }
+    return new CteRecepcaoSincronoOSV4(configuracaoWsdl);
+  }
 
-    public static CteRecepcaoEvento CriaWsdlCteEvento(ConfiguracaoServico configuracaoServico = null, X509Certificate2 certificado = null)
-    {
-        var url = UrlHelper.ObterUrlServico(configuracaoServico).CteRecepcaoEvento;
+  public static CteRecepcaoEvento
+  CriaWsdlCteEvento(ConfiguracaoServico configuracaoServico = null,
+                    X509Certificate2 certificado = null) {
+    var url = UrlHelper.ObterUrlServico(configuracaoServico).CteRecepcaoEvento;
 
-        var configuracaoWsdl = CriaConfiguracao(url, configuracaoServico, certificado);
+    var configuracaoWsdl =
+        CriaConfiguracao(url, configuracaoServico, certificado);
 
-        return new CteRecepcaoEvento(configuracaoWsdl);
-    }
+    return new CteRecepcaoEvento(configuracaoWsdl);
+  }
 
-    public static CteRecepcaoEventoV4 CriaWsdlCteEventoV4(ConfiguracaoServico configuracaoServico = null, X509Certificate2 certificado = null)
-    {
-        var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
+  public static CteRecepcaoEventoV4
+  CriaWsdlCteEventoV4(ConfiguracaoServico configuracaoServico = null,
+                      X509Certificate2 certificado = null) {
+    var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
 
-        var url = UrlHelper.ObterUrlServico(configServico).CteRecepcaoEvento;
+    var url = UrlHelper.ObterUrlServico(configServico).CteRecepcaoEvento;
 
-        var configuracaoWsdl = CriaConfiguracao(url, configServico, certificado);
+    var configuracaoWsdl = CriaConfiguracao(url, configServico, certificado);
 
-        return new CteRecepcaoEventoV4(configuracaoWsdl);
-    }
+    return new CteRecepcaoEventoV4(configuracaoWsdl);
+  }
 
+  public static CTeDistDFeInteresse
+  CriaWsdlCTeDistDFeInteresse(ConfiguracaoServico configuracaoServico = null,
+                              X509Certificate2 certificado = null) {
+    var url = UrlHelper.ObterUrlServico(configuracaoServico).CTeDistribuicaoDFe;
 
-    public static CTeDistDFeInteresse CriaWsdlCTeDistDFeInteresse(ConfiguracaoServico configuracaoServico = null, X509Certificate2 certificado = null)
-    {
-        var url = UrlHelper.ObterUrlServico(configuracaoServico).CTeDistribuicaoDFe;
+    var configuracaoWsdl =
+        CriaConfiguracao(url, configuracaoServico, certificado);
 
-        var configuracaoWsdl = CriaConfiguracao(url, configuracaoServico, certificado);
+    return new CTeDistDFeInteresse(configuracaoWsdl);
+  }
 
-        return new CTeDistDFeInteresse(configuracaoWsdl);
-    }
+  private static WsdlConfiguracao
+  CriaConfiguracao(string url, ConfiguracaoServico configuracaoServico,
+                   X509Certificate2 certificado) {
+    var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
 
+    var codigoEstado = configServico.cUF.GetCodigoIbgeEmString();
+    var certificadoDigital = certificado ?? configServico.X509Certificate2;
+    var versaoEmString = configServico.VersaoLayout.GetString();
+    var timeOut = configServico.TimeOut;
 
-    private static WsdlConfiguracao CriaConfiguracao(string url, ConfiguracaoServico configuracaoServico, X509Certificate2 certificado)
-    {
-        var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
-
-        var codigoEstado = configServico.cUF.GetCodigoIbgeEmString();
-        var certificadoDigital = certificado ?? configServico.X509Certificate2;
-        var versaoEmString = configServico.VersaoLayout.GetString();
-        var timeOut = configServico.TimeOut;
-
-        return new WsdlConfiguracao
-        {
-            CertificadoDigital = certificadoDigital,
-            Versao = versaoEmString,
-            CodigoIbgeEstado = codigoEstado,
-            Url = url,
-            TimeOut = timeOut
-        };
-    }
+    return new WsdlConfiguracao { CertificadoDigital = certificadoDigital,
+                                  Versao = versaoEmString,
+                                  CodigoIbgeEstado = codigoEstado, Url = url,
+                                  TimeOut = timeOut };
+  }
 }
 }
