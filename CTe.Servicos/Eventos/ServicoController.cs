@@ -46,80 +46,80 @@ using CteEletronicoOS = CTe.CTeOSClasses.CTeOS;
 
 namespace CTe.Servicos.Eventos
 {
-    public class ServicoController : IServicoController
+public class ServicoController : IServicoController
+{
+    public retEventoCTe Executar(CteEletronico cte, int sequenciaEvento, EventoContainer container, CTeTipoEvento cTeTipoEvento, ConfiguracaoServico configuracaoServico = null)
     {
-        public retEventoCTe Executar(CteEletronico cte, int sequenciaEvento, EventoContainer container, CTeTipoEvento cTeTipoEvento, ConfiguracaoServico configuracaoServico = null)
+        var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
+        return Executar(cTeTipoEvento, sequenciaEvento, cte.Chave(), cte.infCte.emit.CNPJ, container, configServico);
+    }
+
+    public retEventoCTe Executar(CteEletronicoOS cte, int sequenciaEvento, EventoContainer container, CTeTipoEvento cTeTipoEvento, ConfiguracaoServico configuracaoServico = null)
+    {
+        var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
+        return Executar(cTeTipoEvento, sequenciaEvento, cte.Chave(), cte.InfCte.emit.CNPJ, container, configServico);
+    }
+
+    public async Task<retEventoCTe> ExecutarAsync(CteEletronico cte, int sequenciaEvento, EventoContainer container, CTeTipoEvento cTeTipoEvento, ConfiguracaoServico configuracaoServico = null)
+    {
+        var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
+        return await ExecutarAsync(cTeTipoEvento, sequenciaEvento, cte.Chave(), cte.infCte.emit.CNPJ, container, configServico);
+    }
+
+    public retEventoCTe Executar(CTeTipoEvento cTeTipoEvento, int sequenciaEvento, string chave, string cnpj, EventoContainer container, ConfiguracaoServico configuracaoServico = null)
+    {
+        var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
+        var evento = FactoryEvento.CriaEvento(cTeTipoEvento, sequenciaEvento, chave, cnpj, container, configServico);
+        evento.Assina(configServico);
+
+        if (configuracaoServico.IsValidaSchemas)
+            evento.ValidarSchema(configServico);
+
+        evento.SalvarXmlEmDisco(configServico);
+
+        XmlNode retornoXml = null;
+
+        if (evento.versao == versao.ve200 || evento.versao == versao.ve300)
         {
-            var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
-            return Executar(cTeTipoEvento, sequenciaEvento, cte.Chave(), cte.infCte.emit.CNPJ, container, configServico);
+            var webService = WsdlFactory.CriaWsdlCteEvento(configServico);
+            retornoXml = webService.cteRecepcaoEvento(evento.CriaXmlRequestWs());
         }
 
-        public retEventoCTe Executar(CteEletronicoOS cte, int sequenciaEvento, EventoContainer container, CTeTipoEvento cTeTipoEvento, ConfiguracaoServico configuracaoServico = null)
+        if (evento.versao == versao.ve400)
         {
-            var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
-            return Executar(cTeTipoEvento, sequenciaEvento, cte.Chave(), cte.InfCte.emit.CNPJ, container, configServico);
+            var webService = WsdlFactory.CriaWsdlCteEventoV4(configServico);
+            retornoXml = webService.cteRecepcaoEvento(evento.CriaXmlRequestWs());
         }
 
-        public async Task<retEventoCTe> ExecutarAsync(CteEletronico cte, int sequenciaEvento, EventoContainer container, CTeTipoEvento cTeTipoEvento, ConfiguracaoServico configuracaoServico = null)
-        {
-            var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
-            return await ExecutarAsync(cTeTipoEvento, sequenciaEvento, cte.Chave(), cte.infCte.emit.CNPJ, container, configServico);
-        }
+        var retorno = retEventoCTe.LoadXml(retornoXml.OuterXml, evento);
+        retorno.SalvarXmlEmDisco(configServico);
 
-        public retEventoCTe Executar(CTeTipoEvento cTeTipoEvento, int sequenciaEvento, string chave, string cnpj, EventoContainer container, ConfiguracaoServico configuracaoServico = null)
-        {
-            var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
-            var evento = FactoryEvento.CriaEvento(cTeTipoEvento, sequenciaEvento, chave, cnpj, container, configServico);
-            evento.Assina(configServico);
+        return retorno;
+    }
 
-            if (configuracaoServico.IsValidaSchemas)
-                evento.ValidarSchema(configServico);
-
-            evento.SalvarXmlEmDisco(configServico);
-
-            XmlNode retornoXml = null;
-
-            if (evento.versao == versao.ve200 || evento.versao == versao.ve300)
-            {
-                var webService = WsdlFactory.CriaWsdlCteEvento(configServico);
-                retornoXml = webService.cteRecepcaoEvento(evento.CriaXmlRequestWs());
-            }
-
-            if (evento.versao == versao.ve400)
-            {
-                var webService = WsdlFactory.CriaWsdlCteEventoV4(configServico);
-                retornoXml = webService.cteRecepcaoEvento(evento.CriaXmlRequestWs());
-            }
-
-            var retorno = retEventoCTe.LoadXml(retornoXml.OuterXml, evento);
-            retorno.SalvarXmlEmDisco(configServico);
-
-            return retorno;
-        }
-
-        public async Task<retEventoCTe> ExecutarAsync(CTeTipoEvento cTeTipoEvento,
+    public async Task<retEventoCTe> ExecutarAsync(CTeTipoEvento cTeTipoEvento,
             int sequenciaEvento,
             string chave, string
             cnpj, EventoContainer container,
             ConfiguracaoServico configuracaoServico = null)
-        {
-            var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
+    {
+        var configServico = configuracaoServico ?? ConfiguracaoServico.Instancia;
 
-            var evento = FactoryEvento.CriaEvento(cTeTipoEvento, sequenciaEvento, chave, cnpj, container, configServico);
-            evento.Assina(configServico);
+        var evento = FactoryEvento.CriaEvento(cTeTipoEvento, sequenciaEvento, chave, cnpj, container, configServico);
+        evento.Assina(configServico);
 
-            if (configServico.IsValidaSchemas)
-                evento.ValidarSchema(configServico);
+        if (configServico.IsValidaSchemas)
+            evento.ValidarSchema(configServico);
 
-            evento.SalvarXmlEmDisco(configServico);
+        evento.SalvarXmlEmDisco(configServico);
 
-            var webService = WsdlFactory.CriaWsdlCteEvento(configServico);
-            var retornoXml = await webService.cteRecepcaoEventoAsync(evento.CriaXmlRequestWs());
+        var webService = WsdlFactory.CriaWsdlCteEvento(configServico);
+        var retornoXml = await webService.cteRecepcaoEventoAsync(evento.CriaXmlRequestWs());
 
-            var retorno = retEventoCTe.LoadXml(retornoXml.OuterXml, evento);
-            retorno.SalvarXmlEmDisco(configServico);
+        var retorno = retEventoCTe.LoadXml(retornoXml.OuterXml, evento);
+        retorno.SalvarXmlEmDisco(configServico);
 
-            return retorno;
-        }
+        return retorno;
     }
+}
 }
